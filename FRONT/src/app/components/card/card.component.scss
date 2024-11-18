@@ -1,0 +1,74 @@
+@import '../../../styles/colors.scss';
+@import '../../../styles/placeholders.scss';
+
+.card {
+    border-radius: 4px;
+    padding: 1rem;
+    background-color: $light-white;
+    margin-bottom: 1rem;
+
+    &-header {
+        @extend %flexbox;
+        align-items: center;
+
+        &-title {
+            @extend %flexbox;
+            word-break: break-word;
+            width: calc(100% - 35px);
+            padding: 0;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        &-input {
+            width: 100%;
+            padding: .5rem;
+        }
+    }
+
+    &-divider {
+        margin: 1rem 0;
+    }
+
+    &-body {
+        @extend %flexbox;
+
+        &-input {
+            min-height: 4rem;
+            resize: none;
+            width: 100%;
+        }
+    }
+
+    &-button {
+        @extend %flexbox;
+        padding: 0;
+        height: 35px;
+        width: 35px;
+        justify-content: center;
+        align-items: center;
+
+        &-hidden {
+            opacity: 0;
+        }
+    }
+
+    &-footer {
+        &-save {
+            @extend %flexbox;
+            margin-top: 1rem;
+            justify-content: flex-end;
+        }
+
+        &-navigate {
+            @extend %flexbox;
+            justify-content: space-between;
+        }
+    }
+}
+
+:host(app-card)::ng-deep .NgxEditor {
+    min-height: 10rem;
+    max-height: 20rem;
+    overflow: auto;
+}

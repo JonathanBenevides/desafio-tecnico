@@ -1,0 +1,17 @@
+<h1 class="title">Kanbam</h1>
+<section class="flex-box">
+    <div class="column">
+        <h2 class="column-title">Novo</h2>
+        <app-card [stage]="newStage" (action)="action($event)"></app-card>
+    </div>
+    <div class="column" *ngFor="let stage of stages; let i = index;">
+        <h2 class="column-title">{{stageTitles[i]}}</h2>
+        <app-card
+            *ngFor="let card of getColumnCards(stage)"
+            [stage]="stage"
+            [card]="card"
+            (action)="action($event)"
+        ></app-card>
+    </div>
+</section>
+     

@@ -1,0 +1,78 @@
+<div class="card mat-elevation-z4">
+    <form [formGroup]="form">
+        <div class="card-header">
+            <h3 *ngIf="!edit; else title;" class="card-header-title">{{placeholder('TITLE')}}</h3>
+            <button 
+                *ngIf="!edit"
+                matRipple
+                class="card-button color-warning"
+                (click)="edit=!edit"
+            >
+                <mat-icon fontIcon="edit"></mat-icon>
+            </button>
+            <ng-template #title>
+                <input
+                    class="card-header-input"
+                    [placeholder]="placeholder('TITLE')"
+                    formControlName="titulo"
+                >
+            </ng-template>
+        </div>
+        <mat-divider class="card-divider"></mat-divider>
+        <div class="card-body">
+            <div *ngIf="edit; else description;" class="card-body-input">
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor [editor]="editor" formControlName="conteudo"></ngx-editor>
+            </div>
+            <ng-template #description>
+                <app-description #description [content]="content"></app-description>
+            </ng-template>
+        </div>
+        <div class="card-footer">
+            <div *ngIf="edit" class="card-footer-save" >
+                <button
+                    matRipple
+                    class="card-button color-error"
+                    (click)="reset(); edit=!edit;"
+                >
+                    <mat-icon fontIcon="close"></mat-icon>
+                </button>
+                <button
+                    matRipple
+                    class="card-button color-success"
+                    [disabled]="form.invalid"
+                    (click)="emit(stage.toUpperCase() === 'NOVO' ? buttonAction.CREATE : buttonAction.PUT)"
+                >
+                    <mat-icon fontIcon="check"></mat-icon>
+                </button>
+            </div>
+            <div class="card-footer-navigate" *ngIf="!edit && stage.toUpperCase() !== 'NOVO'">
+                <button
+                    matRipple
+                    class="card-button"
+                    [disabled]="stage.toUpperCase() === 'TODO'"
+                    [ngClass]="stage.toUpperCase() === 'TODO' ? 'card-button-hidden' : ''"
+                    (click)="emit(buttonAction.PREV)"
+                >
+                    <mat-icon fontIcon="chevron_left"></mat-icon>
+                </button>
+                <button
+                    matRipple
+                    class="card-button color-error"
+                    (click)="emit(buttonAction.DEL)"
+                >
+                    <mat-icon fontIcon="delete_forever"></mat-icon>
+                </button>
+                <button
+                    matRipple
+                    class="card-button"
+                    [disabled]="stage.toUpperCase() === 'DONE'"
+                    [ngClass]="stage.toUpperCase() === 'DONE' ? 'card-button-hidden' : ''"
+                    (click)="emit(buttonAction.NEXT)"
+                >
+                    <mat-icon fontIcon="chevron_right"></mat-icon>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

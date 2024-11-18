@@ -1,0 +1,19 @@
+@import '../../../styles/colors.scss';
+
+.title {
+    text-align: center;
+    color: $light-white;
+}
+
+.column {
+    display: grid;
+    align-self: baseline;
+    padding: 0 1rem;
+    flex: 1 1 250px;
+    max-width: 500px;
+
+    &-title {
+        text-align: center;
+        color: $light-white;
+    }
+}

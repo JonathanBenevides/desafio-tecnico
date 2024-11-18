@@ -1,0 +1,92 @@
+@import 'styles/colors.scss';
+
+/* You can add global styles to this file, and also import other style files */
+body {
+    margin: 0;
+    padding: 0 0 1rem 0;
+    background-color: $dark-green;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.flex-box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+main {
+    padding-top: 1rem;
+    width: 100%;
+}
+
+html,
+main,
+body {
+    height: 100%;
+}
+
+button {
+    background-color: transparent;
+    cursor: default;
+    border: none;
+
+    &:disabled {
+        cursor: default !important;
+        color: $gray;
+        opacity: 0.4;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.color {
+    &-error {
+        color: $error;
+    }
+
+    &-success {
+        color: $success;
+    }
+
+    &-warning {
+        color: $warning;
+    }
+}
+
+.mat-mdc-snack-bar-container {
+    margin-top: 20px !important;
+    margin-right: 20px !important;
+
+    &.snackbar-success {
+        --mdc-snackbar-container-color: #28a745;
+    }
+
+    &.snackbar-error {
+        --mdc-snackbar-container-color: #dc3545;
+    }
+
+    &.snackbar-warning {
+        --mdc-snackbar-container-color: #ff7800;
+    }
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: $light-white;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: $medium-gray;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: $dark-gray;
+}
