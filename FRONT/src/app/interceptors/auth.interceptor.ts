@@ -1,38 +1,38 @@
-import { HttpEvent, HttpEventType, HttpInterceptorFn, HttpStatusCode } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpEventType, HttpInterceptorFn, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { tap } from 'rxjs';
+import { catchError, EMPTY, finalize, tap } from 'rxjs';
 
 import { HttpMethod } from '../enum/http-method.enum';
 import { ProgressBarService } from '../services/progress-bar.service';
 
-const token = sessionStorage.getItem('token');
 const defaultConfig = { duration: 5000, horizontalPosition: 'right', verticalPosition: 'top' } as MatSnackBarConfig;
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const _snackBar = inject(MatSnackBar);
   const _progressbar = inject(ProgressBarService);
   _progressbar.showProgressBar$.next(true);
+  const token = sessionStorage.getItem('token');
   const newReq = req.clone({ setHeaders: { 'Authorization': `Bearer ${token}` } });
   return next(newReq).pipe(
     tap((event: HttpEvent<any>) => {
       if (event.type === HttpEventType.Response) {
-        _progressbar.showProgressBar$.next(false);
-        const errorOnClientSide = event.status >= HttpStatusCode.BadRequest && event.status < HttpStatusCode.InternalServerError;
-        const errorOnServerSide = event.status >= HttpStatusCode.InternalServerError || event.status === 0;
-        if (errorOnClientSide) {
-          clientSideErrorHandler(event.status, _snackBar);
-          return;
-        }
-        if (errorOnServerSide) {
-          serverSideErrorHandler(_snackBar);
-          return;
-        }
         if (!req.url.includes('login')) {
           successHandler(req.method, _snackBar);
         }
       }
-    })
+    }),
+    catchError((event: HttpErrorResponse) => {
+        const errorOnClientSide = event.status >= HttpStatusCode.BadRequest && event.status < HttpStatusCode.InternalServerError;
+        const errorOnServerSide = event.status >= HttpStatusCode.InternalServerError || event.status === 0;
+        if (errorOnClientSide) {
+          clientSideErrorHandler(event.status, _snackBar);
+        } else if (errorOnServerSide) {
+          serverSideErrorHandler(_snackBar);
+        }
+        return EMPTY;
+    }),
+    finalize(() => _progressbar.showProgressBar$.next(false))
   );
 };
 
